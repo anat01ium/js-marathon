@@ -1,4 +1,41 @@
-const phone = prompt('Введите свой номер телефона:');
+// Задание №1
+
+const firstRow = prompt('Задание #1\nВведите первую строку:');
+const secondRow = prompt('Введите вторую строку:');
+const letter = prompt('Задайте букву для сравнения:');
+
+function calcLetters(str) {
+   let result = 0;
+
+   for (let i = 0; i < str.length; ++i) {
+      if (str.charAt(i) === letter) { ++result; }
+   }
+
+   return result;
+}
+
+function compareRows(firstRow, secondRow) {
+   let result = '';
+
+   if (calcLetters(firstRow) === 0 && calcLetters(secondRow) === 0) {
+      result = 'Таких букв в строках нет';
+   } else if (calcLetters(firstRow) === calcLetters(secondRow)) {
+      result = `В строках одинаковое количество больше букв "${letter}"`;
+   } else {
+      result = `В этой строке больше букв "${letter}":\n`;
+      result += calcLetters(firstRow) > calcLetters(secondRow) ? firstRow : secondRow;
+   }
+
+   return result;
+}
+
+alert(compareRows(firstRow, secondRow));
+
+
+
+// Задание #2
+
+const phone = prompt('Задание #2\nВведите свой номер телефона:');
 
 function formatPhone(phone) {
    let result = '';
