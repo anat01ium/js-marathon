@@ -20,7 +20,7 @@ function compareRows(firstRow, secondRow) {
    if (calcLetters(firstRow) === 0 && calcLetters(secondRow) === 0) {
       result = 'Таких букв в строках нет';
    } else if (calcLetters(firstRow) === calcLetters(secondRow)) {
-      result = `В строках одинаковое количество больше букв "${letter}"`;
+      result = `В строках одинаковое количество букв "${letter}"`;
    } else {
       result = `В этой строке больше букв "${letter}":\n`;
       result += calcLetters(firstRow) > calcLetters(secondRow) ? firstRow : secondRow;
