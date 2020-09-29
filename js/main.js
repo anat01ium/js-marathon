@@ -2,50 +2,55 @@ const $btnKick = document.getElementById('btn-kick');
 const $btnKickEnemy = document.getElementById('btn-kick-enemy');
 
 const character = {
+   id: 'character',
    name: 'Pikachu',
-   defaultHP: 100,
-   damageHP: 100,
-   $health: document.getElementById('health-character'),
-   $progressbar: document.getElementById('progressbar-character')
+   defaultHP: 150,
+   damageHP: 150,
+   renderHP: renderHP,
+   changeHP: changeHP
 };
 
 const enemy = {
+   id: 'enemy',
    name: 'Charmander',
    defaultHP: 100,
    damageHP: 100,
-   $health: document.getElementById('health-enemy'),
-   $progressbar: document.getElementById('progressbar-enemy')
+   renderHP: renderHP,
+   changeHP: changeHP
 };
 
-function renderHP(person) {
-   person.$health.innerText = `${person.damageHP} / ${person.defaultHP}`;
-   person.$progressbar.style.width = `${person.damageHP}%`;
+function renderHP() {
+   const $health = document.getElementById(`health-${this.id}`);
+   const $progressbar = document.getElementById(`progressbar-${this.id}`);
+
+   $health.innerText = `${this.damageHP} / ${this.defaultHP}`;
+   $progressbar.style.width = `${this.damageHP / this.defaultHP * 100}%`;
 }
 
-function changeHP(person, count) {
+function changeHP(count) {
    const power = Math.ceil(Math.random() * count);
 
-   if (person.damageHP < power) {
-      person.damageHP = 0;
+   if (this.damageHP < power) {
+      this.damageHP = 0;
       $btnKick.disabled = true;
       $btnKickEnemy.disabled = true;
-      alert(`Бедному ${person.name} хана, Finish Him!`);
+      alert(`Бедному ${this.name} хана, Finish Him!`);
    } else {
-      person.damageHP -= power;
+      this.damageHP -= power;
    }
 
-   renderHP(person);
+   this.renderHP();
 }
 
 function init() {
-   renderHP(character);
-   renderHP(enemy);
+   character.renderHP();
+   enemy.renderHP();
    $btnKick.addEventListener('click', () => {
-      changeHP(character, 20);
-      changeHP(enemy, 20);
+      character.changeHP(20);
+      enemy.changeHP(20);
    });
    $btnKickEnemy.addEventListener('click', () => {
-      changeHP(enemy, 40);
+      enemy.changeHP(40);
    });
 }
 
