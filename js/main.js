@@ -28,15 +28,13 @@ function renderHP() {
 }
 
 function changeHP(count) {
-   const power = Math.ceil(Math.random() * count);
+   this.damageHP -= Math.ceil(Math.random() * count);
 
-   if (this.damageHP < power) {
+   if (this.damageHP <= 0) {
       this.damageHP = 0;
       $btnKick.disabled = true;
       $btnKickEnemy.disabled = true;
       alert(`Бедному ${this.name} хана, Finish Him!`);
-   } else {
-      this.damageHP -= power;
    }
 
    this.renderHP();
