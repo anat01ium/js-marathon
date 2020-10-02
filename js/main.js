@@ -8,8 +8,8 @@ const character = {
       current: 150,
       total: 150
    },
-   renderHealth: renderHealth,
-   changeHealth: changeHealth
+   renderHealth,
+   changeHealth
 };
 
 const enemy = {
@@ -19,8 +19,8 @@ const enemy = {
       current: 100,
       total: 100
    },
-   renderHealth: renderHealth,
-   changeHealth: changeHealth
+   renderHealth,
+   changeHealth
 };
 
 function generateLog(firstPerson, secondPerson) {
