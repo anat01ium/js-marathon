@@ -23,6 +23,19 @@ const enemy = {
    changeHealth
 };
 
+const hits = {
+   thunderJolt: {
+      name: 'Thunder Jolt',
+      strength: 20,
+      count: 6
+   },
+   kickEnemy: {
+      name: 'Kick Enemy',
+      strength: 40,
+      count: 4
+   }
+}
+
 function generateLog(firstPerson, secondPerson) {
    const logs = [
       `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага.`,
@@ -47,8 +60,6 @@ function renderLog(person, healthStatus) {
 
    $p.innerText = `${log} ${healthStatus}`;
    $logs.insertBefore($p, $logs.children[0]);
-
-   console.log(log, healthStatus);
 }
 
 function renderHealth() {
@@ -60,12 +71,12 @@ function renderHealth() {
    $progressbar.style.width = `${current / total * 100}%`;
 }
 
-function changeHealth(count) {
+function changeHealth(strength) {
    const { name, health } = this;
-   const power = Math.ceil(Math.random() * count);
-   const healthStatus = `${-power} [${health.current}/${health.total}]`;
+   const kick = Math.ceil(Math.random() * strength);
+   const healthStatus = `${-kick} [${health.current}/${health.total}]`;
    
-   health.current -= power;
+   health.current -= kick;
 
    if (health.current <= 0) {
       health.current = 0;
@@ -78,15 +89,40 @@ function changeHealth(count) {
    renderLog(this, healthStatus);
 }
 
+function renderBtnText (button, hit) {
+   return button.innerText = `${hit.name} (${hit.count})`;
+}
+
+function countBtnClick(hit) {
+   return (button) => {
+      --hit.count;
+      renderBtnText(button, hit);
+      
+      if (hit.count <= 0) {
+         button.disabled = true;
+      }
+   }
+}
+
 function init() {
+   const { thunderJolt, kickEnemy } = hits;
+   const countBtnKick = countBtnClick(thunderJolt);
+   const countBtnKickEnemy = countBtnClick(kickEnemy);
+
+   renderBtnText($btnKick, thunderJolt);
+   renderBtnText($btnKickEnemy, kickEnemy);
    character.renderHealth();
    enemy.renderHealth();
+
    $btnKick.addEventListener('click', () => {
-      character.changeHealth(20);
-      enemy.changeHealth(20);
+      character.changeHealth(thunderJolt.strength);
+      enemy.changeHealth(thunderJolt.strength);
+      countBtnKick($btnKick);
    });
+
    $btnKickEnemy.addEventListener('click', () => {
-      enemy.changeHealth(40);
+      enemy.changeHealth(kickEnemy.strength);
+      countBtnKickEnemy($btnKickEnemy);
    });
 }
 
