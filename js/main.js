@@ -1,27 +1,19 @@
+import Pokemon from "./pokemon.js";
+
 const $btnKick = document.getElementById('btn-kick');
 const $btnKickEnemy = document.getElementById('btn-kick-enemy');
 
-const character = {
-   id: 'character',
+const player1 = new Pokemon({
+   selectors: 'character',
    name: 'Pikachu',
-   health: {
-      current: 150,
-      total: 150
-   },
-   renderHealth,
-   changeHealth
-};
+   health: 150
+});
 
-const enemy = {
-   id: 'enemy',
+const player2 = new Pokemon({
+   selectors: 'enemy',
    name: 'Charmander',
-   health: {
-      current: 100,
-      total: 100
-   },
-   renderHealth,
-   changeHealth
-};
+   health: 100
+});
 
 const hits = {
    thunderJolt: {
@@ -29,6 +21,7 @@ const hits = {
       strength: 20,
       count: 6
    },
+
    kickEnemy: {
       name: 'Kick Enemy',
       strength: 40,
@@ -36,18 +29,21 @@ const hits = {
    }
 }
 
-function generateLog(firstPerson, secondPerson) {
+function generateLog(player1, player2) {
+   const { name: characterName } = player1;
+   const { name: enemyName } = player2;
+
    const logs = [
-      `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага.`,
-      `${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага.`,
-      `${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил.`,
-      `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар.`,
-      `${firstPerson.name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника.`,
-      `${firstPerson.name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар.`,
-      `${firstPerson.name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар.`,
-      `${firstPerson.name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника`,
-      `${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника.`,
-      `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику.`
+      `${characterName} вспомнил что-то важное, но неожиданно ${enemyName}, не помня себя от испуга, ударил в предплечье врага.`,
+      `${characterName} поперхнулся, и за это ${enemyName} с испугу приложил прямой удар коленом в лоб врага.`,
+      `${characterName} забылся, но в это время наглый ${enemyName}, приняв волевое решение, неслышно подойдя сзади, ударил.`,
+      `${characterName} пришел в себя, но неожиданно ${enemyName} случайно нанес мощнейший удар.`,
+      `${characterName} поперхнулся, но в это время ${enemyName} нехотя раздробил кулаком \<вырезанно цензурой\> противника.`,
+      `${characterName} удивился, а ${enemyName} пошатнувшись влепил подлый удар.`,
+      `${characterName} высморкался, но неожиданно ${enemyName} провел дробящий удар.`,
+      `${characterName} пошатнулся, и внезапно наглый ${enemyName} беспричинно ударил в ногу противника`,
+      `${characterName} расстроился, как вдруг, неожиданно ${enemyName} случайно влепил стопой в живот соперника.`,
+      `${characterName} пытался что-то сказать, но вдруг, неожиданно ${enemyName} со скуки, разбил бровь сопернику.`
    ];
 
    return logs[Math.floor(Math.random() * logs.length)];
@@ -56,37 +52,10 @@ function generateLog(firstPerson, secondPerson) {
 function renderLog(person, healthStatus) {
    const $logs = document.querySelector('#logs');
    const $p = document.createElement('p');
-   const log = person === enemy ? generateLog(person, character) : generateLog(person, enemy);
+   const log = person === player2 ? generateLog(person, player1) : generateLog(person, player2);
 
    $p.innerText = `${log} ${healthStatus}`;
    $logs.insertBefore($p, $logs.children[0]);
-}
-
-function renderHealth() {
-   const { id, health: { current, total } } = this;
-   const $health = document.getElementById(`health-${id}`);
-   const $progressbar = document.getElementById(`progressbar-${id}`);
-
-   $health.innerText = `${current} / ${total}`;
-   $progressbar.style.width = `${current / total * 100}%`;
-}
-
-function changeHealth(strength) {
-   const { name, health } = this;
-   const kick = Math.ceil(Math.random() * strength);
-   const healthStatus = `${-kick} [${health.current}/${health.total}]`;
-   
-   health.current -= kick;
-
-   if (health.current <= 0) {
-      health.current = 0;
-      $btnKick.disabled = true;
-      $btnKickEnemy.disabled = true;
-      alert(`Бедному ${name} хана, Finish Him!`);
-   }
-
-   this.renderHealth();
-   renderLog(this, healthStatus);
 }
 
 function renderBtnText (button, hit) {
@@ -98,9 +67,7 @@ function countBtnClick(hit) {
       --hit.count;
       renderBtnText(button, hit);
       
-      if (hit.count <= 0) {
-         button.disabled = true;
-      }
+      if (hit.count <= 0) { button.disabled = true; }
    }
 }
 
@@ -111,18 +78,24 @@ function init() {
 
    renderBtnText($btnKick, thunderJolt);
    renderBtnText($btnKickEnemy, kickEnemy);
-   character.renderHealth();
-   enemy.renderHealth();
+   player1.renderHealth();
+   player2.renderHealth();
 
    $btnKick.addEventListener('click', () => {
-      character.changeHealth(thunderJolt.strength);
-      enemy.changeHealth(thunderJolt.strength);
       countBtnKick($btnKick);
+      player1.changeHealth(thunderJolt.strength, (healthStatus) => {
+         renderLog(player1, healthStatus);
+      });
+      player2.changeHealth(thunderJolt.strength, (healthStatus) => {
+         renderLog(player2, healthStatus);
+      });
    });
-
+   
    $btnKickEnemy.addEventListener('click', () => {
-      enemy.changeHealth(kickEnemy.strength);
       countBtnKickEnemy($btnKickEnemy);
+      player2.changeHealth(thunderJolt.strength, (healthStatus) => {
+         renderLog(player2, healthStatus);
+      });
    });
 }
 
