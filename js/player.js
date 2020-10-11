@@ -10,9 +10,10 @@ class Selectors {
 }
 
 class Player extends Selectors {
-	constructor({ selectors, img, name, type, hp, attacks }) {
+	constructor({ selectors, id, img, name, type, hp, attacks }) {
 		super(selectors);
 
+		this.id = id;
 		this.img = img;
 		this.name = name;
 		this.type = type;

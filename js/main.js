@@ -2,15 +2,27 @@ import random from "./random.js";
 import countAttack from "./count.js";
 import generateLog from "./log.js";
 import Player from "./player.js";
-import { pokemons } from "./pokemons.js";
+// import { pokemons } from "./pokemons.js";
 
 class Game {
+	getPokemons = async () => {
+		const response = await fetch('https://reactmarathon-api.netlify.app/api/pokemons');
+		const body = await response.json();
+		return body;
+	}
+
+	getKick = async (id_player1, id_player2, id_attack) => {
+		const response = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${id_player1}&attackId=${id_attack}&player2id=${id_player2}`);
+		const body = await response.json();
+		return body;
+	}
+
 	resetBoard = () => {
 		document.querySelectorAll('.health').forEach(item => item.classList.remove('low', 'critical'));
 		document.querySelector('.control').innerHTML = '';
 		document.querySelector('#logs').innerHTML = '';
 	}
-	
+
 	renderAttackButtons = (player1, player2) => {
 		player1.attacks.forEach(item => {
 			const { name, minDamage, maxDamage, maxCount } = item;
@@ -39,13 +51,16 @@ class Game {
 
 				player1.changeHealth(player2.attacks[0].maxDamage, player2.attacks[0].minDamage, (healthStats) => {
 					generateLog(player1.name, player2.name, healthStats);
-					if (player1.hp.current <= 0) { this.over(player1.name) }
+					if (player1.hp.current <= 0) {
+						this.over(player1.name)
+					}
 				});
 			});
 		});		
 	}
 
-	start = () => {
+	start = async () => {
+		const pokemons = await this.getPokemons();
 		const player1 = new Player({ selectors: 'player1', ...pokemons[random(pokemons.length)] });
 		const player2 = new Player({ selectors: 'player2', ...pokemons[random(pokemons.length)] });
 
@@ -70,12 +85,15 @@ class Game {
 		$againButton.addEventListener('click', () => this.start());
 	}
 
-	next = (survivor) => {
-		const player1 = survivor;
-		const player2 = new Player({ selectors: 'player2', ...pokemons[random(pokemons.length)] });
+	next = async (winner) => {
+		const pokemons = await this.getPokemons();
 
+		const player1 = winner;
 		player1.hp.current = player1.hp.total;
 		player1.renderHealth();
+
+		const player2 = new Player({ selectors: 'player2', ...pokemons[random(pokemons.length)] });
+
 		this.resetBoard();
 		this.renderAttackButtons(player1, player2);
 	}
