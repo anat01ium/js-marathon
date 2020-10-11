@@ -1,4 +1,4 @@
-import random from "./random.js";
+// import random from "./random.js";
 
 class Selectors {
 	constructor(player) {
@@ -51,9 +51,10 @@ class Player extends Selectors {
 		}
 	}
 
-	changeHealth = (maxDamage, minDamage, cb) => {
+	// changeHealth = (maxDamage, minDamage, cb) => {
+	changeHealth = (damage, cb) => {
 		const { hp } = this;
-		const damage = random(maxDamage, minDamage);
+		// const damage = random(maxDamage, minDamage);
 		const healthStats = `${-damage} [${hp.current}/${hp.total}]`;
 		hp.current -= damage;
 	
