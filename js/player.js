@@ -1,22 +1,25 @@
+// import random from "./random.js";
+
 class Selectors {
 	constructor(player) {
-		this.$img = document.getElementById(`img-${player}`);
-		this.$name = document.getElementById(`name-${player}`);
-		this.$health = document.getElementById(`health-${player}`);
-		this.$progressbar = document.getElementById(`progressbar-${player}`);
+		this.$playerImg = document.getElementById(`${player}-img`);
+		this.$playerName = document.getElementById(`${player}-name`);
+		this.$playerHealth = document.getElementById(`${player}-health`);
+		this.$playerProgressbar = document.getElementById(`${player}-progressbar`);
 	}
 }
 
 class Player extends Selectors {
-	constructor({ selectors, img, name, type, health, attacks }) {
+	constructor({ selectors, id, img, name, type, hp, attacks }) {
 		super(selectors);
 
+		this.id = id;
 		this.img = img;
 		this.name = name;
 		this.type = type;
-		this.health = {
-			current: health,
-			total: health
+		this.hp = {
+			current: hp,
+			total: hp
 		};
 		this.attacks = attacks;
 
@@ -26,44 +29,39 @@ class Player extends Selectors {
 	}
 
 	renderImg = () => {
-		const { $img, img } = this;
-
-		$img.src = img;
+		const { $playerImg, img } = this;
+		$playerImg.src = img;
 	}
 
 	renderName = () => {
-		const { $name, name } = this;
-
-		$name.innerText = name;
+		const { $playerName, name } = this;
+		$playerName.innerText = name;
 	}
 
 	renderHealth = () => {
-		const { $health, $progressbar, health: { current, total } } = this;
-		const $healthColor = document.querySelector('.health');
-		const percent = current / total * 100;
+		const { $playerHealth, $playerProgressbar, hp: { current, total } } = this;
+		const percent = current / total * 100;		
+		$playerHealth.innerText = `${current} / ${total}`;
+		$playerProgressbar.style.width = `${percent}%`;
 
-		$health.innerText = `${current} / ${total}`;
-		$progressbar.style.width = `${percent}%`;
-
-
-		if (percent > 20 && percent < 60) {
-			$healthColor.classList.add('low'); 
+		if (percent < 60 && percent > 20) {
+			$playerProgressbar.classList.add('low'); 
 		} else if (percent < 20) {
-			$healthColor.classList.add('critical');
+			$playerProgressbar.classList.add('critical');
 		}
 	}
 
-	changeHealth = (minDamage, maxDamage, cb) => {
-		const { health } = this;
-		const damage = Math.floor(Math.random() * (maxDamage - minDamage)) + minDamage;
-		const healthStatus = `${-damage} [${health.current}/${health.total}]`;
-
-		health.current -= damage;
+	// changeHealth = (maxDamage, minDamage, cb) => {
+	changeHealth = (damage, cb) => {
+		const { hp } = this;
+		// const damage = random(maxDamage, minDamage);
+		const healthStats = `${-damage} [${hp.current}/${hp.total}]`;
+		hp.current -= damage;
 	
-		if (health.current <= 0) {	health.current = 0; }
+		if (hp.current <= 0) { hp.current = 0; }
 	
 		this.renderHealth();
-		cb && cb(healthStatus);
+		cb && cb(healthStats);
 	}
 }
 

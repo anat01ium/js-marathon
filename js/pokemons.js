@@ -3,7 +3,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/pikachu.png',
       name: 'Pikachu',
       type: 'electric',
-      health: 274,
+      hp: 274,
       attacks: [
          {
             name: "Thunder jolt",
@@ -35,7 +35,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/charmander.png',
       name: 'Charmander',
       type: 'fire',
-      health: 282,
+      hp: 282,
       attacks: [
          {
             name: "Ember",
@@ -67,7 +67,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/bulbasaur.png',
       name: 'Bulbasaur',
       type: 'fire',
-      health: 294,
+      hp: 294,
       attacks: [
          {
             name: "Tackle",
@@ -99,7 +99,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/squirtle.png',
       name: 'Squirtle',
       type: 'water',
-      health: 292,
+      hp: 292,
       attacks: [
          {
             name: "Bubble",
@@ -131,7 +131,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/pidgey.png',
       name: 'Pidgey',
       type: 'air',
-      health: 284,
+      hp: 284,
       attacks: [
          {
             name: "Air Slash",
@@ -163,7 +163,7 @@ export const pokemons = [
       img: 'http://sify4321.000webhostapp.com/mew.png',
       name: 'Mew',
       type: 'air',
-      health: 404,
+      hp: 404,
       attacks: [
          {
             name: "Pound",
